@@ -182,11 +182,11 @@ function ConnectedPlot(props: ConnectedPlotProps) {
     {
       onOpen: () => {
         console.log(`${plotID}: WebSocket connected`);
-        setSendReceive(SendReceive.INITIALIZED);
+        !didUnmount.current && setSendReceive(SendReceive.INITIALIZED);
       },
       onClose: () => {
         console.log(`${plotID}: WebSocket disconnected`);
-        setSendReceive(SendReceive.NOT_READY);
+        !didUnmount.current && setSendReceive(SendReceive.NOT_READY);
       },
       shouldReconnect: () => {
         return !didUnmount.current;

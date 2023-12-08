@@ -16,9 +16,16 @@
     "lint-fix": "pnpm --filter {client/*} lint-fix",
     "lint:tsc": "pnpm tsc"
   },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react-aria-menubutton>react": "18.x"
+      }
+    }
+  },
   "devDependencies": {
-    "prettier": "^2.8.8",
-    "typescript": "^5.3.2"
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.3"
   },
   "overrides": {
     "typescript": "^5.1.3"
