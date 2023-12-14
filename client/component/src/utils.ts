@@ -5,6 +5,7 @@ import cwise from 'cwise';
 import { bin } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import type {
+  Aspect,
   AxialSelectToZoomProps,
   ColorMap,
   DefaultInteractionsConfig,
@@ -18,7 +19,6 @@ import type {
 } from '@h5web/lib';
 
 import type {
-  Aspect,
   AxesParameters,
   DAxesParameters,
   DLineData,
@@ -487,7 +487,11 @@ function measureInteraction() {
   };
 }
 
-type InteractionModeType = 'panAndWheelZoom' | 'selectToZoom' | 'selectRegion';
+enum InteractionModeType {
+  panAndWheelZoom = 'panAndWheelZoom',
+  selectToZoom = 'selectToZoom',
+  selectRegion = 'selectRegion',
+}
 
 export {
   appendDLineData,
@@ -502,6 +506,7 @@ export {
   createHistogramParams,
   createInteractionsConfig,
   getAspectType,
+  InteractionModeType,
   isHeatmapData,
   isNumber,
   isValidNumber,
@@ -510,10 +515,4 @@ export {
   nanMinMax,
 };
 
-export type {
-  DHeatmapData,
-  DImageData,
-  DScatterData,
-  DTableData,
-  InteractionModeType,
-};
+export type { DHeatmapData, DImageData, DScatterData, DTableData };
