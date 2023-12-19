@@ -26,12 +26,11 @@ def j_dumps(data, default=None) -> bytes:
     if isinstance(data, BaseModel):
         return data.model_dump_json().encode()
 
-    d = orjson.dumps(
+    return orjson.dumps(
         data,
         default=default,
         option=orjson.OPT_SERIALIZE_NUMPY,
     )
-    return d
 
 
 def _deserialize_selection(item):

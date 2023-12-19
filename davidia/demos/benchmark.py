@@ -42,7 +42,7 @@ def create_parser():
         description="Benchmark plotting client",
         formatter_class=ArgumentDefaultsHelpFormatter,
     )
-    plot_types = list(p.name for p in PlotType)
+    plot_types = [p.name for p in PlotType]
     parser.add_argument(
         "-t", "--type", help="Plot type", choices=plot_types, default=plot_types[0]
     )

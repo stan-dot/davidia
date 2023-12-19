@@ -164,11 +164,7 @@ class PlotConnection:
         if "line_on" not in attribs:
             attribs["line_on"] = True
 
-        if append:
-            msg_type = MsgType.append_line_data
-        else:
-            msg_type = MsgType.new_multiline_data
-
+        msg_type = MsgType.append_line_data if append else MsgType.new_multiline_data
         def _asanyarray(x):
             return x if x is None else np.asanyarray(x)
 
@@ -475,8 +471,8 @@ def _get_default_plot_id(plot_id: str | None = None):
         return plot_id
     if _DEF_PLOT_ID is None:
         get_plot_connection()
-        if _DEF_PLOT_ID is None:
-            raise ValueError("No default plot ID - please specify as parameter")
+    if _DEF_PLOT_ID is None:
+        raise ValueError("No default plot ID - please specify as parameter")
     return _DEF_PLOT_ID
 
 
