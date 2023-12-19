@@ -286,7 +286,7 @@ async def test_clear_data_via_message():
 
 @pytest.mark.asyncio
 async def test_push_points():
-    x = [i for i in range(10)]
+    x = list(range(10))
     y = [j % 10 for j in x]
     time_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     line = LineData(key=time_id, colour="purple", x=x, y=y, line_on=True)

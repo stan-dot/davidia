@@ -60,7 +60,7 @@ class LineData(NumpyModel):
         x_size = getattr(values.data.get("x", 0), "size", 0)
         if x_size != 0:
             y_size = getattr(v, "size", 0)
-            if x_size != y_size and x_size != y_size + 1:
+            if x_size not in [y_size, y_size + 1]:
                 raise ValueError(
                     "x and y arrays must be equal length if provided: "
                     f"{x_size}, {y_size}"

@@ -54,7 +54,7 @@ async def test_send_points():
     assert ps.plot_states == {}
 
     plot_state_0 = ps.plot_states["plot_0"]
-    x = np.array([i for i in range(50)])
+    x = np.array(list(range(50)))
     y = np.array([j % 10 for j in x])
     time_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     new_line = PlotMessage(
@@ -110,9 +110,7 @@ def test_line_data_initialization(name, key: str, x: list, default_indices: bool
 def _array_equal(a: DvDNDArray | None, b: DvDNDArray | None):
     if a is None:
         return b is None
-    if b is None:
-        return False
-    return np.array_equal(a, b)
+    return False if b is None else np.array_equal(a, b)
 
 
 def line_data_are_equal(a: LineData, b: LineData) -> bool:
@@ -134,10 +132,10 @@ def assert_line_data_messages_are_equal(
     assert a.axes_parameters == b.axes_parameters
     if isinstance(a, MultiLineDataMessage) and isinstance(b, MultiLineDataMessage):
         assert len(a.ml_data) == len(b.ml_data)
-        assert all([line_data_are_equal(c, d) for c, d in zip(a.ml_data, b.ml_data)])
+        assert all(line_data_are_equal(c, d) for c, d in zip(a.ml_data, b.ml_data))
     elif isinstance(a, AppendLineDataMessage) and isinstance(b, AppendLineDataMessage):
         assert len(a.al_data) == len(b.al_data)
-        assert all([line_data_are_equal(c, d) for c, d in zip(a.al_data, b.al_data)])
+        assert all(line_data_are_equal(c, d) for c, d in zip(a.al_data, b.al_data))
     else:
         raise AssertionError(
             "a and b must both be either MultiLineDataMessage or"

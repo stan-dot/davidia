@@ -246,10 +246,7 @@ class PlotServer:
 
     def clients_available(self) -> bool:
         """Return True if any clients are available"""
-        for cl in self._clients.values():
-            if any(cl):
-                return True
-        return False
+        return any(any(cl) for cl in self._clients.values())
 
     def get_plot_ids(self) -> list[str]:
         """Get plot IDs
@@ -384,9 +381,7 @@ class PlotServer:
         def _append(a: DvDNDArray | None, b: DvDNDArray | None):
             if a is None:
                 return b
-            if b is None:
-                return a
-            return np.append(a, b)
+            return a if b is None else np.append(a, b)
 
         if not default_indices:
             combined_lines = [
@@ -580,8 +575,8 @@ async def handle_client(server: PlotServer, plot_id: str, socket: WebSocket, uui
     initialize = True
     try:
         while True:
-            update_all = False
             message = await socket.receive()
+            update_all = False
             if message["type"] == "websocket.disconnect":
                 logger.debug(f"Websocket disconnected: {client.name}")
                 update_all = await server.remove_client(plot_id, client)
@@ -618,11 +613,11 @@ async def handle_client(server: PlotServer, plot_id: str, socket: WebSocket, uui
                 mtype = received_message.type
 
                 is_valid = True
-                if (
-                    mtype == MsgType.client_new_selection
-                    or mtype == MsgType.client_update_selection
-                    or mtype == MsgType.clear_selection_data
-                ):
+                if mtype in [
+                    MsgType.client_new_selection,
+                    MsgType.client_update_selection,
+                    MsgType.clear_selection_data,
+                ]:
                     logger.debug(
                         f"Got from {plot_id} ({mtype}): {received_message.params}"
                     )
@@ -631,8 +626,7 @@ async def handle_client(server: PlotServer, plot_id: str, socket: WebSocket, uui
                         omit = client  # omit originating client
                     else:
                         logger.error(
-                            "Selection change requested from client"
-                            + f" {client.uuid} without baton"
+                            f"Selection change requested from client {client.uuid} without baton"
                         )
 
                 if is_valid:
@@ -681,7 +675,7 @@ def convert_append_to_multi_line_data_message(
 
     Returns the new multi-line data message
     """
-    default_indices = any([a.default_indices for a in msg.al_data])
+    default_indices = any(a.default_indices for a in msg.al_data)
     if default_indices:
         for m in msg.al_data:
             m.x = np.arange(m.y.size, dtype=np.min_scalar_type(m.y.size))
